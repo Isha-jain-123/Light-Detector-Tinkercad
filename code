@@ -1,0 +1,46 @@
+// C++ code
+//
+int sensor_value = 0;
+int output_value = 0;
+int switchstate=0;
+int switchPin = 12;
+
+void setup()
+{ 
+  pinMode(switchPin, INPUT);
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+  pinMode(9, OUTPUT);
+  pinMode(10,OUTPUT); 
+  pinMode(3, OUTPUT);
+}
+
+void loop()
+{
+  sensor_value = analogRead(A0);
+  output_value = map(sensor_value, 0, 1023, 0, 255);
+  analogWrite(9, output_value);
+  analogWrite(10, output_value);
+  //Serial.println(sensor_value);
+  Serial.println(output_value);
+  if (output_value>=150){
+  	digitalWrite(10, HIGH);
+    digitalWrite(9, LOW);
+  }
+  else{
+  	digitalWrite(9, HIGH);
+    digitalWrite(10, LOW);
+  }
+  delay(10); // Delay a little bit to improve simulation performance
+ 
+  // BUZZER PART
+  //tone(3, output_value);
+  switchstate = digitalRead(switchPin);
+  if (switchstate == HIGH ){
+  	tone(3, output_value);
+	//tone(3,sensor_value);
+  }
+  else{
+  	noTone(3);
+  }
+}
